@@ -1,0 +1,5 @@
+{
+  "name": "AI-Powered Developer Portfolio",
+  "description": "A sleek, modern portfolio website that showcases GitHub projects and provides AI-powered code reviews using the Gemini API.",
+  "requestFramePermissions": []
+}
