@@ -3,6 +3,7 @@
 
 import * as React from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { motion } from "framer-motion"
 import { Github, ExternalLink } from "lucide-react"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
@@ -27,10 +28,12 @@ export function ProjectCard({ project }: ProjectCardProps) {
                         {project.name.charAt(0)}
                     </div>
                     {project.case_study?.imageUrl && (
-                        <img
+                        <Image
                             src={project.case_study.imageUrl}
                             alt={project.name}
-                            className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 hover:scale-105"
+                            fill
+                            className="object-cover transition-transform duration-500 hover:scale-105"
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         />
                     )}
                 </div>

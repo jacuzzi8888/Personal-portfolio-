@@ -4,8 +4,9 @@
 import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
 import Link from "next/link"
+import Image from "next/image"
 import { motion } from "framer-motion"
-import { ArrowLeft, Github, ExternalLink, Calendar, Tag } from "lucide-react"
+import { ArrowLeft, Github, ExternalLink, Tag } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -101,10 +102,13 @@ export default function ProjectDetailsPage() {
                     <div className="lg:col-span-2 space-y-8">
                         <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-muted border border-border/40">
                             {project.case_study?.imageUrl ? (
-                                <img
+                                <Image
                                     src={project.case_study.imageUrl}
                                     alt={project.name}
-                                    className="absolute inset-0 h-full w-full object-cover"
+                                    fill
+                                    className="object-cover"
+                                    priority
+                                    sizes="(max-width: 1024px) 100vw, 66vw"
                                 />
                             ) : (
                                 <div className="absolute inset-0 flex items-center justify-center text-muted-foreground/20 text-6xl font-bold">
