@@ -9,6 +9,7 @@ export interface Project {
     tags: string[];
     github_url: string;
     live_url?: string;
+    image_url?: string;
     case_study?: any;
     created_at?: string;
 }

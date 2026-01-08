@@ -3,11 +3,13 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { Menu, Github, Linkedin, Mail } from "lucide-react"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu"
+import { Menu, Github, Linkedin, LogOut, User, FolderKanban, Mail, LayoutDashboard } from "lucide-react"
+import { useAuthStore } from "@/stores/authStore"
 
 const navItems = [
     { name: "Home", href: "/" },
@@ -18,7 +20,13 @@ const navItems = [
 
 export function Header() {
     const pathname = usePathname()
+    const router = useRouter()
     const [isScrolled, setIsScrolled] = React.useState(false)
+    const { session, signOut, checkSession } = useAuthStore()
+
+    React.useEffect(() => {
+        checkSession()
+    }, [checkSession])
 
     React.useEffect(() => {
         const handleScroll = () => {
@@ -27,6 +35,13 @@ export function Header() {
         window.addEventListener("scroll", handleScroll)
         return () => window.removeEventListener("scroll", handleScroll)
     }, [])
+
+    const handleLogout = async () => {
+        await signOut()
+        router.push("/")
+    }
+
+    const isAdmin = !!session
 
     return (
         <header
@@ -69,11 +84,43 @@ export function Header() {
                                 <span className="sr-only">LinkedIn</span>
                             </a>
                         </Button>
-                        <Button variant="default" size="sm" asChild className="ml-2">
-                            <Link href="/#contact">
-                                Hire Me
-                            </Link>
-                        </Button>
+
+                        {/* Admin Dropdown or Hire Me Button */}
+                        {isAdmin ? (
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant="default" size="sm" className="ml-2 gap-2">
+                                        <User className="h-4 w-4" />
+                                        Admin
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end" className="w-48">
+                                    <DropdownMenuItem asChild>
+                                        <Link href="/admin" className="cursor-pointer">
+                                            <LayoutDashboard className="mr-2 h-4 w-4" />
+                                            Dashboard
+                                        </Link>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem asChild>
+                                        <Link href="/projects" className="cursor-pointer">
+                                            <FolderKanban className="mr-2 h-4 w-4" />
+                                            My Projects
+                                        </Link>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-destructive">
+                                        <LogOut className="mr-2 h-4 w-4" />
+                                        Logout
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        ) : (
+                            <Button variant="default" size="sm" asChild className="ml-2">
+                                <Link href="/#contact">
+                                    Hire Me
+                                </Link>
+                            </Button>
+                        )}
                     </div>
                 </nav>
 
@@ -99,6 +146,26 @@ export function Header() {
                                     {item.name}
                                 </Link>
                             ))}
+
+                            {isAdmin && (
+                                <>
+                                    <Link
+                                        href="/admin"
+                                        className="text-lg font-medium text-primary hover:text-primary/80"
+                                    >
+                                        Admin Dashboard
+                                    </Link>
+                                    <Button
+                                        variant="destructive"
+                                        className="w-full gap-2 mt-4"
+                                        onClick={handleLogout}
+                                    >
+                                        <LogOut className="h-4 w-4" />
+                                        Logout
+                                    </Button>
+                                </>
+                            )}
+
                             <div className="flex items-center gap-4 mt-4 pt-4 border-t border-border">
                                 <a href="https://github.com/omotoye-odewole" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground">
                                     <Github className="h-6 w-6" />

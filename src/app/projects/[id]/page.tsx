@@ -6,20 +6,31 @@ import { useParams, useRouter } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
 import { motion } from "framer-motion"
-import { ArrowLeft, Github, ExternalLink, Tag } from "lucide-react"
+import { ArrowLeft, Github, ExternalLink, Tag, Pencil, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
-import { useProjectStore } from "@/stores/projectStore"
+import { useProjectStore, Project } from "@/stores/projectStore"
 import { supabase } from "@/lib/supabase"
-import { Project } from "@/stores/projectStore"
+import { useAuthStore } from "@/stores/authStore"
+import { ProjectFormModal } from "@/components/features/projects/ProjectFormModal"
+import { DeleteProjectDialog } from "@/components/features/projects/DeleteProjectDialog"
 
 export default function ProjectDetailsPage() {
     const params = useParams()
     const router = useRouter()
     const { projects } = useProjectStore()
+    const { session, checkSession } = useAuthStore()
     const [project, setProject] = useState<Project | null>(null)
     const [isLoading, setIsLoading] = useState(true)
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+
+    useEffect(() => {
+        checkSession()
+    }, [checkSession])
+
+    const isAdmin = !!session
 
     useEffect(() => {
         const fetchProject = async () => {
@@ -118,7 +129,19 @@ export default function ProjectDetailsPage() {
                         </div>
 
                         <div>
-                            <h1 className="text-4xl font-bold tracking-tight mb-4">{project.name}</h1>
+                            <div className="flex justify-between items-start mb-4">
+                                <h1 className="text-4xl font-bold tracking-tight">{project.name}</h1>
+                                {isAdmin && (
+                                    <div className="flex gap-2">
+                                        <Button variant="outline" size="icon" onClick={() => setIsEditModalOpen(true)}>
+                                            <Pencil className="h-4 w-4" />
+                                        </Button>
+                                        <Button variant="destructive" size="icon" onClick={() => setIsDeleteDialogOpen(true)}>
+                                            <Trash2 className="h-4 w-4" />
+                                        </Button>
+                                    </div>
+                                )}
+                            </div>
                             <p className="text-xl text-muted-foreground leading-relaxed">
                                 {project.description}
                             </p>
@@ -191,6 +214,22 @@ export default function ProjectDetailsPage() {
                     </div>
                 </div>
             </motion.div>
-        </div>
+
+            <ProjectFormModal
+                isOpen={isEditModalOpen}
+                onClose={() => setIsEditModalOpen(false)}
+                projectToEdit={project}
+            />
+
+            {project && (
+                <DeleteProjectDialog
+                    projectId={project.id}
+                    projectName={project.name}
+                    isOpen={isDeleteDialogOpen}
+                    onClose={() => setIsDeleteDialogOpen(false)}
+                    onDeleted={() => router.push("/projects")}
+                />
+            )}
+        </div >
     )
 }

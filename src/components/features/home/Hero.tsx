@@ -2,16 +2,27 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { motion } from "framer-motion"
-import { ArrowRight, Code2, Database, Layout } from "lucide-react"
+import { ArrowRight, Code2, Database, Layout, FileDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 export function Hero() {
     return (
-        <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-background pt-16">
-            {/* Background Elements */}
-            <div className="absolute inset-0 w-full h-full bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
-            <div className="absolute left-0 right-0 top-0 -z-10 m-auto h-[310px] w-[310px] rounded-full bg-primary/20 opacity-20 blur-[100px]"></div>
+        <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden pt-16">
+            {/* Banner Background Image */}
+            <div className="absolute inset-0 w-full h-full">
+                <Image
+                    src="/banner.jpg"
+                    alt="Hero Banner"
+                    fill
+                    className="object-cover"
+                    priority
+                    quality={90}
+                />
+                {/* Dark overlay for text readability */}
+                <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/70 to-background" />
+            </div>
 
             <div className="container px-4 md:px-6 relative z-10">
                 <div className="flex flex-col items-center text-center space-y-8">
@@ -41,7 +52,7 @@ export function Hero() {
                         transition={{ duration: 0.5, delay: 0.2 }}
                         className="text-xl text-muted-foreground max-w-[600px] md:text-2xl"
                     >
-                        Senior Full-Stack Developer with 20+ years of experience crafting robust, scalable, and user-centric web solutions.
+                        Senior Fullstack Vibecoder with extensive experience crafting robust, scalable, and user-centric web solutions.
                     </motion.p>
 
                     <motion.div
@@ -61,6 +72,13 @@ export function Hero() {
                             <Link href="/#contact">
                                 Contact Me
                             </Link>
+                        </Button>
+
+                        <Button size="lg" variant="ghost" className="h-12 px-8 text-lg hover:bg-primary/10" asChild>
+                            <a href="/resume.pdf" download="Omotoye_Odewole_Resume.pdf">
+                                <FileDown className="mr-2 h-5 w-5" />
+                                Resume
+                            </a>
                         </Button>
                     </motion.div>
 

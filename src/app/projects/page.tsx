@@ -1,6 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import { useAuthStore } from "@/stores/authStore"
+import { useEffect, useState } from "react"
 import { Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ProjectGrid } from "@/components/features/projects/ProjectGrid"
@@ -8,8 +9,13 @@ import { ProjectFormModal } from "@/components/features/projects/ProjectFormModa
 
 export default function ProjectsPage() {
     const [isModalOpen, setIsModalOpen] = useState(false)
-    // TODO: Replace with actual auth check
-    const isAdmin = true
+    const { session, checkSession } = useAuthStore()
+
+    useEffect(() => {
+        checkSession()
+    }, [checkSession])
+
+    const isAdmin = !!session
 
     return (
         <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">

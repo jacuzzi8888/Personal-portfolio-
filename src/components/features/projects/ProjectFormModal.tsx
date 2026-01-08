@@ -26,6 +26,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { useProjectStore, Project } from "@/stores/projectStore"
+import { toast } from "sonner"
 
 const projectSchema = z.object({
     name: z.string().min(2, "Name must be at least 2 characters"),
@@ -119,12 +120,21 @@ export function ProjectFormModal({ isOpen, onClose, projectToEdit }: ProjectForm
 
             if (projectToEdit) {
                 await updateProject(projectToEdit.id, projectData)
+                toast.success("Project updated successfully", {
+                    description: `"${values.name}" has been updated.`,
+                })
             } else {
                 await addProject(projectData)
+                toast.success("Project created successfully", {
+                    description: `"${values.name}" has been added to your portfolio.`,
+                })
             }
             onClose()
         } catch (error) {
             console.error("Failed to save project:", error)
+            toast.error("Failed to save project", {
+                description: "Please check your inputs and try again.",
+            })
         } finally {
             setIsSubmitting(false)
         }
