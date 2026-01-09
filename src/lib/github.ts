@@ -15,7 +15,7 @@ export interface GitHubRepo {
 }
 
 // Default GitHub username - can be overridden via env var
-const GITHUB_USERNAME = process.env.NEXT_PUBLIC_GITHUB_USERNAME || 'omotoye-odewole';
+const GITHUB_USERNAME = process.env.NEXT_PUBLIC_GITHUB_USERNAME || 'jacuzzi8888';
 
 export async function fetchGitHubRepos(): Promise<GitHubRepo[]> {
     try {
