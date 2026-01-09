@@ -4,15 +4,27 @@
 import { ProjectCard } from "./ProjectCard"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useProjectStore } from "@/stores/projectStore"
-import { useEffect } from "react"
+import { useEffect, useMemo } from "react"
 import { motion } from "framer-motion"
 
-export function ProjectGrid() {
+interface ProjectGridProps {
+    filterTags?: string[]
+}
+
+export function ProjectGrid({ filterTags = [] }: ProjectGridProps) {
     const { projects, isLoading, fetchProjects } = useProjectStore()
 
     useEffect(() => {
         fetchProjects()
     }, [fetchProjects])
+
+    // Filter projects based on selected tags
+    const filteredProjects = useMemo(() => {
+        if (filterTags.length === 0) return projects
+        return projects.filter(project =>
+            filterTags.some(tag => project.tags.includes(tag))
+        )
+    }, [projects, filterTags])
 
     if (isLoading) {
         return (
@@ -30,10 +42,14 @@ export function ProjectGrid() {
         )
     }
 
-    if (projects.length === 0) {
+    if (filteredProjects.length === 0) {
         return (
             <div className="text-center py-12">
-                <p className="text-muted-foreground text-lg">No projects found.</p>
+                <p className="text-muted-foreground text-lg">
+                    {filterTags.length > 0
+                        ? "No projects match the selected filters."
+                        : "No projects found."}
+                </p>
             </div>
         )
     }
@@ -60,7 +76,7 @@ export function ProjectGrid() {
             animate="show"
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
-            {projects.map((project) => (
+            {filteredProjects.map((project) => (
                 <motion.div key={project.id} variants={item}>
                     <ProjectCard project={project} />
                 </motion.div>
@@ -68,3 +84,4 @@ export function ProjectGrid() {
         </motion.div>
     )
 }
+

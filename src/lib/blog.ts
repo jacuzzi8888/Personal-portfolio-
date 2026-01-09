@@ -12,6 +12,13 @@ export interface BlogPost {
     description: string;
     tags: string[];
     content: string;
+    readingTime: number; // in minutes
+}
+
+function calculateReadingTime(content: string): number {
+    const wordsPerMinute = 200;
+    const wordCount = content.trim().split(/\s+/).length;
+    return Math.max(1, Math.ceil(wordCount / wordsPerMinute));
 }
 
 export function getAllPosts(): BlogPost[] {
@@ -33,6 +40,7 @@ export function getAllPosts(): BlogPost[] {
             description: data.description,
             tags: data.tags || [],
             content,
+            readingTime: calculateReadingTime(content),
         };
     });
 
@@ -52,6 +60,7 @@ export function getPostBySlug(slug: string): BlogPost | null {
             description: data.description,
             tags: data.tags || [],
             content,
+            readingTime: calculateReadingTime(content),
         };
     } catch (error) {
         return null;

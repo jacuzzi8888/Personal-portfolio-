@@ -2,7 +2,7 @@
 import Link from "next/link"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
-import { ArrowLeft, Calendar, Tag } from "lucide-react"
+import { ArrowLeft, Calendar, Clock } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { getPostBySlug, getAllPosts } from "@/lib/blog"
@@ -75,9 +75,16 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                         ))}
                     </div>
                     <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">{post.title}</h1>
-                    <div className="flex items-center gap-2 text-muted-foreground">
-                        <Calendar className="h-4 w-4" />
-                        <time dateTime={post.date}>{post.date}</time>
+                    <div className="flex items-center gap-4 text-muted-foreground">
+                        <div className="flex items-center gap-2">
+                            <Calendar className="h-4 w-4" />
+                            <time dateTime={post.date}>{post.date}</time>
+                        </div>
+                        <span className="text-muted-foreground/50">•</span>
+                        <div className="flex items-center gap-2">
+                            <Clock className="h-4 w-4" />
+                            <span>{post.readingTime} min read</span>
+                        </div>
                     </div>
                 </div>
 

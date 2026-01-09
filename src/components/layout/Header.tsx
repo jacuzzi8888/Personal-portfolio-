@@ -10,6 +10,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu"
 import { Menu, Github, Linkedin, LogOut, User, FolderKanban, Mail, LayoutDashboard } from "lucide-react"
 import { useAuthStore } from "@/stores/authStore"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
 
 const navItems = [
     { name: "Home", href: "/" },
@@ -84,8 +85,7 @@ export function Header() {
                                 <span className="sr-only">LinkedIn</span>
                             </a>
                         </Button>
-
-                        {/* Admin Dropdown or Hire Me Button */}
+                        <ThemeToggle />
                         {isAdmin ? (
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
@@ -176,6 +176,7 @@ export function Header() {
                                 <a href="mailto:omotoyeodewole@gmail.com" className="text-muted-foreground hover:text-foreground">
                                     <Mail className="h-6 w-6" />
                                 </a>
+                                <ThemeToggle />
                             </div>
                         </nav>
                     </SheetContent>
