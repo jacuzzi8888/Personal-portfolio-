@@ -48,9 +48,16 @@ interface ProjectFormModalProps {
     isOpen: boolean
     onClose: () => void
     projectToEdit?: Project | null
+    prefillData?: Partial<{
+        name: string
+        description: string
+        github_url: string
+        live_url: string
+        tags: string[]
+    }>
 }
 
-export function ProjectFormModal({ isOpen, onClose, projectToEdit }: ProjectFormModalProps) {
+export function ProjectFormModal({ isOpen, onClose, projectToEdit, prefillData }: ProjectFormModalProps) {
     const { addProject, updateProject } = useProjectStore()
     const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -84,6 +91,19 @@ export function ProjectFormModal({ isOpen, onClose, projectToEdit }: ProjectForm
                 outcome: projectToEdit.case_study?.outcome || "",
                 imageUrl: projectToEdit.case_study?.imageUrl || "",
             })
+        } else if (prefillData) {
+            form.reset({
+                name: prefillData.name || "",
+                description: prefillData.description || "",
+                github_url: prefillData.github_url || "",
+                live_url: prefillData.live_url || "",
+                tags: prefillData.tags?.join(", ") || "",
+                problem: "",
+                role: "",
+                process: "",
+                outcome: "",
+                imageUrl: "",
+            })
         } else {
             form.reset({
                 name: "",
@@ -98,7 +118,7 @@ export function ProjectFormModal({ isOpen, onClose, projectToEdit }: ProjectForm
                 imageUrl: "",
             })
         }
-    }, [projectToEdit, form, isOpen])
+    }, [projectToEdit, prefillData, form, isOpen])
 
     const onSubmit = async (values: ProjectFormValues) => {
         setIsSubmitting(true)
