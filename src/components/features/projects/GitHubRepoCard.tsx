@@ -8,11 +8,9 @@ import { Github, ExternalLink, Star, GitFork } from "lucide-react"
 
 interface GitHubRepoCardProps {
     repo: GitHubRepo
-    onFeature?: (repo: GitHubRepo) => void
-    isAdmin?: boolean
 }
 
-export function GitHubRepoCard({ repo, onFeature, isAdmin }: GitHubRepoCardProps) {
+export function GitHubRepoCard({ repo }: GitHubRepoCardProps) {
     const languageColor = repo.language ? languageColors[repo.language] || '#888' : null
 
     return (
@@ -70,26 +68,15 @@ export function GitHubRepoCard({ repo, onFeature, isAdmin }: GitHubRepoCardProps
                 <Button variant="outline" size="sm" className="flex-1 gap-2" asChild>
                     <a href={repo.html_url} target="_blank" rel="noopener noreferrer">
                         <Github className="h-4 w-4" />
-                        Code
+                        View Code
                     </a>
                 </Button>
                 {repo.homepage && (
                     <Button variant="default" size="sm" className="flex-1 gap-2" asChild>
                         <a href={repo.homepage} target="_blank" rel="noopener noreferrer">
                             <ExternalLink className="h-4 w-4" />
-                            Demo
+                            Live Demo
                         </a>
-                    </Button>
-                )}
-                {isAdmin && onFeature && (
-                    <Button
-                        variant="secondary"
-                        size="sm"
-                        className="gap-1"
-                        onClick={() => onFeature(repo)}
-                    >
-                        <Star className="h-4 w-4" />
-                        Feature
                     </Button>
                 )}
             </CardFooter>

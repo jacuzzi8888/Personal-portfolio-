@@ -6,12 +6,7 @@ import { GitHubRepoCard } from "./GitHubRepoCard"
 import { Skeleton } from "@/components/ui/skeleton"
 import { motion } from "framer-motion"
 
-interface GitHubRepoGridProps {
-    onFeature?: (repo: GitHubRepo) => void
-    isAdmin?: boolean
-}
-
-export function GitHubRepoGrid({ onFeature, isAdmin }: GitHubRepoGridProps) {
+export function GitHubRepoGrid() {
     const [repos, setRepos] = useState<GitHubRepo[]>([])
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
@@ -85,11 +80,7 @@ export function GitHubRepoGrid({ onFeature, isAdmin }: GitHubRepoGridProps) {
         >
             {repos.map((repo) => (
                 <motion.div key={repo.id} variants={item}>
-                    <GitHubRepoCard
-                        repo={repo}
-                        onFeature={onFeature}
-                        isAdmin={isAdmin}
-                    />
+                    <GitHubRepoCard repo={repo} />
                 </motion.div>
             ))}
         </motion.div>
